@@ -272,18 +272,6 @@ h1 {
   font-weight: 700;
 }
 
-.detailsLink {
-  margin-top: auto;
-  color: var(--rose);
-  font-size: 13px;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.detailsLink:hover {
-  text-decoration: underline;
-}
-
 .pagination {
   display: flex;
   flex-wrap: wrap;

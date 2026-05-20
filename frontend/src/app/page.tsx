@@ -173,11 +173,6 @@ function BookCard({ book, onSelect }: { book: Book; onSelect: (book: Book) => vo
         <p className="byline">{book.author || "Unknown author"}</p>
         <p className="meta">{book.publisher || "Unknown publisher"}</p>
         {book.pubDate ? <p className="date">{book.pubDate}</p> : null}
-        {book.link ? (
-          <a href={book.link} target="_blank" rel="noreferrer" className="detailsLink">
-            Details
-          </a>
-        ) : null}
       </div>
     </article>
   );
