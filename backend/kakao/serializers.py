@@ -43,4 +43,5 @@ def normalize_kakao_item(item: dict[str, Any], index: int) -> dict[str, Any]:
         "isbn": isbn,
         "description": clean_description(item.get("contents")),
         "link": item.get("url") or None,
+        "tags": [],
     }

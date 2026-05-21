@@ -42,4 +42,5 @@ def normalize_naver_item(item: dict[str, Any], index: int) -> dict[str, Any]:
         "isbn": isbn,
         "description": clean_description(item.get("description")),
         "link": item.get("link") or None,
+        "tags": [],
     }

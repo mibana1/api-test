@@ -61,7 +61,8 @@ Search responses use this schema:
   "cover": "string or null",
   "isbn": "string or null",
   "description": "string or null",
-  "link": "string or null"
+  "link": "string or null",
+  "tags": ["string"]
 }
 ```
 

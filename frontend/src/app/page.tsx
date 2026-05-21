@@ -92,6 +92,23 @@ function DetailValue({ label, value }: { label: string; value: string | null | u
   return <>{nullableText(value)}</>;
 }
 
+function TagList({ tags, compact = false }: { tags: string[] | undefined; compact?: boolean }) {
+  const visibleTags = (tags ?? []).filter(Boolean).slice(0, compact ? 3 : 10);
+  if (!visibleTags.length) {
+    return compact ? null : <span className="tagEmpty">null</span>;
+  }
+
+  return (
+    <div className={compact ? "tags compact" : "tags"}>
+      {visibleTags.map((tag) => (
+        <span className="tag" key={tag}>
+          {tag}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function BookDetailModal({
   book,
   onClose,
@@ -133,6 +150,8 @@ function BookDetailModal({
           <h2 id="book-detail-title">{nullableText(book.title)}</h2>
           <p className="modalLabel">Summary</p>
           <p className="modalSummary">{summaryText(book.description)}</p>
+          <p className="modalLabel">Tags</p>
+          <TagList tags={book.tags} />
           <dl className="detailList">
             {details.map(([label, value]) => (
               <div key={label}>
@@ -173,6 +192,7 @@ function BookCard({ book, onSelect }: { book: Book; onSelect: (book: Book) => vo
         <p className="byline">{book.author || "Unknown author"}</p>
         <p className="meta">{book.publisher || "Unknown publisher"}</p>
         {book.pubDate ? <p className="date">{book.pubDate}</p> : null}
+        <TagList tags={book.tags} compact />
       </div>
     </article>
   );

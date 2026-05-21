@@ -50,6 +50,17 @@ def better_description(current: Any, candidate: Any) -> Any:
     return candidate if len(candidate_text) > len(current_text) else current
 
 
+def merge_tags(*values: Any) -> list[str]:
+    tags: list[str] = []
+    for value in values:
+        if not isinstance(value, list):
+            continue
+        for tag in value:
+            if isinstance(tag, str) and tag and tag not in tags:
+                tags.append(tag)
+    return tags
+
+
 def merge_duplicate_books(books: list[dict[str, Any]]) -> list[dict[str, Any]]:
     by_isbn: dict[str, dict[str, Any]] = {}
     no_isbn: list[dict[str, Any]] = []
@@ -69,6 +80,7 @@ def merge_duplicate_books(books: list[dict[str, Any]]) -> list[dict[str, Any]]:
             by_isbn[key] = {
                 **book,
                 "description": None if is_truncated_text(description) else description,
+                "tags": merge_tags(book.get("tags")),
                 "sources": list(dict.fromkeys(book.get("sources", []))),
             }
             continue
@@ -84,6 +96,7 @@ def merge_duplicate_books(books: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 continue
             if not has_value(merged.get(field)):
                 merged[field] = existing.get(field) or book.get(field)
+        merged["tags"] = merge_tags(existing.get("tags"), book.get("tags"))
         by_isbn[key] = merged
 
     return [*by_isbn.values(), *no_isbn]

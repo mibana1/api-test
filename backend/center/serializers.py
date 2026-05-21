@@ -5,6 +5,7 @@ from typing import Any
 
 TAG_RE = re.compile(r"<[^>]+>")
 TRUNCATED_RE = re.compile("(?:\\.{2,}|\\u2026|\\u22ef)\\s*$")
+TAG_SPLIT_RE = re.compile(r"\s*(?:>|/|;|,)\s*")
 
 
 def clean_text(value: Any) -> str:
@@ -18,6 +19,19 @@ def clean_description(value: Any) -> str | None:
     if not description or TRUNCATED_RE.search(description):
         return None
     return description
+
+
+def normalize_tags(*values: Any) -> list[str]:
+    tags: list[str] = []
+    for value in values:
+        if not value:
+            continue
+        raw_tags = value if isinstance(value, list) else [value]
+        for raw_tag in raw_tags:
+            for tag in TAG_SPLIT_RE.split(clean_text(raw_tag)):
+                if tag and tag not in tags:
+                    tags.append(tag)
+    return tags
 
 
 def normalize_center_item(item: dict[str, Any], index: int) -> dict[str, Any]:
@@ -42,4 +56,12 @@ def normalize_center_item(item: dict[str, Any], index: int) -> dict[str, Any]:
         "isbn": isbn,
         "description": clean_description(item.get("description") or item.get("contents")),
         "link": link,
+        "tags": normalize_tags(
+            item.get("category"),
+            item.get("categoryName"),
+            item.get("className"),
+            item.get("class_nm"),
+            item.get("subject"),
+            item.get("subject_info"),
+        ),
     }

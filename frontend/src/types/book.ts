@@ -12,4 +12,5 @@ export type Book = {
   isbn: string | null;
   description: string | null;
   link: string | null;
+  tags: string[];
 };
